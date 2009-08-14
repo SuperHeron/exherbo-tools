@@ -1,0 +1,53 @@
+# Copyright (c) 2009 Pierre Lejeune <superheron@gmail.com>
+# Distributed under the terms of the GNU General Public License v2
+
+export_exlib_phases src_prepare src_install
+
+myexparam hook_name=auto
+
+DEPENDENCIES="
+    build+run:
+        sys-apps/paludis
+"
+PALUDIS_HOOK_SUFFIX=""
+
+DEFAULT_SRC_COMPILE_PARAMS=( "PALUDIS_HOOK_SONAME=${PN}" )
+
+paludis_version() {
+    illegal_in_global_scope
+
+    local paludis_version_output_cmd= is_git= version_hundred=0 paludis_major=0 paludis_minor=0 paludis_git_revision= paludis_hook_suffix=
+    paludis_version_output_cmd=`paludis --version | head -n1`
+    is_git=`echo ${paludis_version_output_cmd} | grep git`
+    paludis_major=${paludis_version_output_cmd:8:1}
+    paludis_minor=${paludis_version_output_cmd:10:2}
+    version_hundred=`expr ${paludis_major} \* 100 + ${paludis_minor}`
+    if [[ ${#is_git} -gt 0 ]]; then
+        paludis_git_revision=${paludis_version_output_cmd:29:9}
+        PALUDIS_HOOK_SUFFIX=${paludis_major}.${paludis_minor}_${paludis_git_revision}.so.${version_hundred}
+    else
+        PALUDIS_HOOK_SUFFIX=${paludis_major}.${paludis_minor}.so.${version_hundred}
+    fi
+#    local paludis_version= is_git= version_hundred=0 paludis_major=0 paludis_minor=0
+#    is_git=`paludis --version | head -n1 | grep git`
+#    if [[ ${#is_git} -gt 0 ]]; then
+#        paludis_version=`paludis --version | head -n1 | sed -e 's/paludis \([0-9a-z_.]*\) git [-0-9a-z_.]*$/\1/'`
+#    else
+#        paludis_version=`paludis --version | head -n1 | sed -e 's/paludis \([0-9a-z_.]*\)$/\1/'`
+#    fi
+#    paludis_major=${paludis_version:0:1}
+#    paludis_minor=${paludis_version:2:2}
+#    version_hundred=`expr ${paludis_major} \* 100 + ${paludis_minor}`
+#    PALUDIS_HOOK_SUFFIX=${paludis_major}.${paludis_minor}${paludis_version:6}.so.${version_hundred}
+}
+
+paludis-so-hooks_src_prepare() {
+    einfo "Determining paludis version suffix for hooks"
+    paludis_version
+    einfo ${PALUDIS_HOOK_SUFFIX}
+}
+
+paludis-so-hooks_src_install() {
+    exparam -v paludis_hook_name hook_name
+    emake -j1 DESTDIR="${IMAGE}" PALUDIS_HOOK_SUFFIX="${PALUDIS_HOOK_SUFFIX}" PALUDIS_HOOK_NAME="${paludis_hook_name}" PALUDIS_HOOK_SONAME="${PN}" install
+}
