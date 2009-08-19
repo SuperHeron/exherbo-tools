@@ -1,0 +1,22 @@
+# Copyright 2009 Pierre Lejeune
+# Distributed under the terms of the GNU General Public License v2
+
+SCM_REPOSITORY="git://github.com/SuperHeron/multipleownedfileschecker.git"
+require scm-git autotools [ supported_autoconf=[ none ] supported_automake=[ none ] ]
+
+SUMMARY="Application to check which files are owned by multiple packages."
+DESCRIPTION="
+"
+HOMEPAGE="none"
+#DOWNLOADS="${PN}.tar.bz2"
+
+LICENCES="GPL-2"
+SLOT="0"
+PLATFORMS="~x86 ~amd64"
+MYOPTIONS=""
+
+DEPENDENCIES="
+    build+run:
+        sys-apps/paludis
+"
+
