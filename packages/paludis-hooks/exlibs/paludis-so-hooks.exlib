@@ -23,7 +23,7 @@ paludis_version() {
     paludis_minor=${paludis_version_output_cmd:10:2}
     version_hundred=`expr ${paludis_major} \* 100 + ${paludis_minor}`
     if [[ ${#is_git} -gt 0 ]]; then
-        paludis_git_revision=${paludis_version_output_cmd:29:9}
+        paludis_git_revision=${paludis_version_output_cmd:30:8}
         PALUDIS_HOOK_SUFFIX=${paludis_major}.${paludis_minor}_${paludis_git_revision}.so.${version_hundred}
     else
         PALUDIS_HOOK_SUFFIX=${paludis_major}.${paludis_minor}.so.${version_hundred}
