@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 SCM_REPOSITORY="git://github.com/SuperHeron/multipleownedfileschecker.git"
-require scm-git autotools [ supported_autoconf=[ none ] supported_automake=[ none ] ]
+require scm-git autotools [ supported_autoconf=[ 2.5 ] supported_automake=[ 1.11 ] ]
 
 SUMMARY="Application to check which files are owned by multiple packages."
 DESCRIPTION="
