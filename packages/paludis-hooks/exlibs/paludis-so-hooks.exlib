@@ -20,7 +20,7 @@ paludis_version() {
 
     local paludis_version= paludis_major= paludis_minor= git_describe= version_hundred=0
 
-    paludis_version=`paludis --version | head -n1`
+    paludis_version=`cave --version | head -n1`
     if [[ "${paludis_version}" =~ ^paludis\ ([0-9]+)\.([0-9]+)\.[0-9]+ ]]; then
         paludis_major="${BASH_REMATCH[1]}"
         paludis_minor="${BASH_REMATCH[2]}"
