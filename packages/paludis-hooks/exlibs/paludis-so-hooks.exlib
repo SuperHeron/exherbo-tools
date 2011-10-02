@@ -13,6 +13,11 @@ PALUDIS_HOOK_SUFFIX=""
 
 DEFAULT_SRC_COMPILE_PARAMS=( "PALUDIS_HOOK_SONAME=${PN}" )
 
+is_odd() {
+    local result=(${1} % 2)
+    return ${result}
+}
+
 paludis_version() {
     illegal_in_global_scope
 
@@ -27,7 +32,7 @@ paludis_version() {
         version_hundred=`expr ${paludis_major} \* 100 + ${paludis_minor}`
         PALUDIS_HOOK_SUFFIX="${paludis_major}.${paludis_minor}.so.${version_hundred}"
     fi
-    if has_version 'sys-apps/paludis[~scm]'; then
+    if has_version 'sys-apps/paludis[~scm]' && is_odd ${paludis_minor}; then
         cd "${FETCHEDDIR}"/scm/paludis
         git_describe=`git describe HEAD`
         if [[ "${git_describe}" =~ ^[0-9]+\.[0-9]+\.[0-9]+-[0-9]+-([0-9a-z]+)$ ]]; then
